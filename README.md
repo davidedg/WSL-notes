@@ -2,13 +2,13 @@
 Windows Subsystem for Linux - cheatsheet
 
 
-## Safe mounts (No auto mountng of host drives, no auto path, read-only mounts for VSCode and Cursor only:
+## Safe mounts (No auto mounting of host drives, no auto path, read-only mounts for VSCode and Cursor only:
 
 
-/etc/wsl.conf:
+Modify /etc/wsl.conf (disable automount and auto append paths from host):
 
 ```
-automount]
+[automount]
 enabled=false
 mountFsTab = true
 
@@ -89,4 +89,32 @@ C:\Users\user\AppData\Local\Programs\cursor\ on /mnt/c/Users/user/AppData/Local/
 C:\Users\user\.cursor\extensions\ on /mnt/c/Users/user/.cursor/extensions type 9p (ro,relatime,aname=drvfs;path=C:\Users\user\.cursor\extensions\;symlinkroot=/mnt/,cache=5,access=client,msize=65536,trans=fd,rfd=3,wfd=3)                                               
 ```
 
+Check /etc/fstab:
+```
+# UNCONFIGURED FSTAB FOR BASE SYSTEM
 
+C:\Users\user\AppData\Local\Programs\Microsoft\040VS\040Code\  /mnt/c/Users/user/AppData/Local/Programs/Microsoft\040VS\040Code  drvfs  ro  0  0
+C:\Users\user\.vscode\extensions\  /mnt/c/Users/user/.vscode/extensions  drvfs  ro  0  0
+C:\Users\user\AppData\Local\Programs\cursor\  /mnt/c/Users/user/AppData/Local/Programs/cursor  drvfs  ro  0  0
+C:\Users\user\.cursor\extensions\  /mnt/c/Users/user/.cursor/extensions  drvfs  ro  0  0
+```
+
+Check /usr/local/bin/code:
+```
+#!/bin/bash
+"/mnt/c/Users/user/AppData/Local/Programs/Microsoft VS Code/bin/code" "$@"
+```
+
+Check /usr/local/bin/cursor:
+```
+#!/bin/bash
+"/mnt/c/Users/user/AppData/Local/Programs/cursor/resources/app/bin/cursor" "$@"
+```
+
+Test VSCode:
+
+    mkdir testcode ; cd testcode ; code .
+
+Test Cursor:
+
+    mkdir testcursor ; cd testcursor ; cursor .
