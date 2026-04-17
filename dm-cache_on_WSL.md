@@ -11,14 +11,21 @@ Prepare and configure:
 
     cd WSL2-Linux-Kernel
     cat /proc/config.gz | gunzip > .config
-    make prepare modules_prepare
-    make menuconfig
+    touch .scmversion
+    make olddefconfig
 
-search ( "/" ) for DM_CACHE, locate it, enable as a MODULE
-save and exit
-Compile:
+Enable DM_CACHE:
 
-    make -j$(nproc) M=drivers/md modules
+    ./scripts/config --module CONFIG_DM_CACHE
+    ./scripts/config --module CONFIG_DM_CACHE_SMQ
+    ./scripts/config --module CONFIG_DM_WRITECACHE
+    
+Build:
+    
+    ##make -j$(nproc) prepare
+    make -j$(nproc) prepare modules_prepare
+    ###make -j$(nproc) M=drivers/md modules
+    make KBUILD_MODPOST_WARN=1 M=drivers/md modules
 
 Install
 
